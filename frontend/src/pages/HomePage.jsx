@@ -4,13 +4,13 @@ import { useProductStore } from "../stores/useProductStore";
 import FeaturedProducts from "../components/FeaturedProducts";
 
 const categories = [
-	{ href: "/web-development", name: "Web Development", imageUrl: "/web-dev.jpg" },
-	{ href: "/mobile-app", name: "Ứng dụng Mobile", imageUrl: "/mobile.jpg" },
-	{ href: "/data-science", name: "Data Science", imageUrl: "/data-science.jpg" },
-	{ href: "/design", name: "Thiết kế", imageUrl: "/design.jpg" },
-	{ href: "/marketing", name: "Marketing", imageUrl: "/marketing.jpg" },
-	{ href: "/business", name: "Kinh doanh", imageUrl: "/business.jpg" },
-	{ href: "/other", name: "Khác", imageUrl: "/other.jpg" },
+	{ href: "/web-development", name: "Web Development", imageUrl: "/images/categories/web-dev.jpg" },
+	{ href: "/mobile-app", name: "Ứng dụng Mobile", imageUrl: "/images/categories/mobile.jpg" },
+	{ href: "/data-science", name: "Data Science", imageUrl: "/images/categories/data-science.jpg" },
+	{ href: "/design", name: "Thiết kế", imageUrl: "/images/categories/design.jpg" },
+	{ href: "/marketing", name: "Marketing", imageUrl: "/images/categories/marketing.jpg" },
+	{ href: "/business", name: "Kinh doanh", imageUrl: "/images/categories/business.jpg" },
+	{ href: "/other", name: "Khác", imageUrl: "/images/categories/other.jpg" },
 ];
 
 const HomePage = () => {
