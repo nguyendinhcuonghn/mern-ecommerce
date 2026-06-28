@@ -49,16 +49,15 @@ const userSchema = new mongoose.Schema(
  * Pre-save hook: Mã hóa password trước khi lưu vào database
  * Chỉ hash password khi nó bị thay đổi (kể cả khi tạo user mới)
  */
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
 	// Nếu password không thay đổi thì bỏ qua
-	if (!this.isModified("password")) return next();
+	if (!this.isModified("password")) return;
 
 	try {
 		const salt = await bcrypt.genSalt(10);           // Tạo salt
 		this.password = await bcrypt.hash(this.password, salt); // Hash password
-		next();
 	} catch (error) {
-		next(error);
+		throw error;
 	}
 });
 

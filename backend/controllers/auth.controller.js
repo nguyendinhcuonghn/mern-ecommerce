@@ -60,6 +60,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 // ====================== ĐĂNG KÝ ======================
 export const signup = async (req, res) => {
+	console.log("[AUTH] signup request body:", JSON.stringify(req.body));
 	const { email, password, name } = req.body;
 
 	try {
@@ -68,7 +69,7 @@ export const signup = async (req, res) => {
 		if (userExists) {
 			return res.status(400).json({ message: "User already exists" });
 		}
-
+		console.log("Creating new user:", { name, email });
 		// Tạo user mới (password sẽ được hash trong model User trước khi lưu)
 		const user = await User.create({ name, email, password });
 

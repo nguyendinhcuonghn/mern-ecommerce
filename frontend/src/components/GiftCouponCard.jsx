@@ -2,26 +2,52 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useCartStore } from "../stores/useCartStore";
 
+/**
+ * Component GiftCouponCard - Quản lý mã giảm giá / Gift Card trong trang giỏ hàng / checkout
+ */
 const GiftCouponCard = () => {
+	// State lưu mã coupon người dùng nhập vào
 	const [userInputCode, setUserInputCode] = useState("");
-	const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } = useCartStore();
 
+	// Lấy dữ liệu và hàm từ Cart Store (Zustand)
+	const { 
+		coupon, 
+		isCouponApplied, 
+		applyCoupon, 
+		getMyCoupon, 
+		removeCoupon 
+	} = useCartStore();
+
+	/**
+	 * Lấy coupon cá nhân của user khi component mount
+	 */
 	useEffect(() => {
 		getMyCoupon();
 	}, [getMyCoupon]);
 
+	/**
+	 * Đồng bộ input với coupon đã có (nếu user có coupon sẵn)
+	 */
 	useEffect(() => {
-		if (coupon) setUserInputCode(coupon.code);
+		if (coupon) {
+			setUserInputCode(coupon.code);
+		}
 	}, [coupon]);
 
+	/**
+	 * Áp dụng coupon
+	 */
 	const handleApplyCoupon = () => {
-		if (!userInputCode) return;
+		if (!userInputCode.trim()) return;   // Không cho áp dụng nếu trống
 		applyCoupon(userInputCode);
 	};
 
+	/**
+	 * Xóa coupon đã áp dụng
+	 */
 	const handleRemoveCoupon = async () => {
 		await removeCoupon();
-		setUserInputCode("");
+		setUserInputCode("");   // Reset input
 	};
 
 	return (
@@ -32,6 +58,7 @@ const GiftCouponCard = () => {
 			transition={{ duration: 0.5, delay: 0.2 }}
 		>
 			<div className='space-y-4'>
+				{/* Input nhập mã coupon */}
 				<div>
 					<label htmlFor='voucher' className='mb-2 block text-sm font-medium text-gray-300'>
 						Do you have a voucher or gift card?
@@ -49,6 +76,7 @@ const GiftCouponCard = () => {
 					/>
 				</div>
 
+				{/* Nút Apply Code với animation */}
 				<motion.button
 					type='button'
 					className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
@@ -59,6 +87,8 @@ const GiftCouponCard = () => {
 					Apply Code
 				</motion.button>
 			</div>
+
+			{/* Phần hiển thị coupon đã áp dụng */}
 			{isCouponApplied && coupon && (
 				<div className='mt-4'>
 					<h3 className='text-lg font-medium text-gray-300'>Applied Coupon</h3>
@@ -81,6 +111,7 @@ const GiftCouponCard = () => {
 				</div>
 			)}
 
+			{/* Hiển thị coupon cá nhân của user (nếu có) */}
 			{coupon && (
 				<div className='mt-4'>
 					<h3 className='text-lg font-medium text-gray-300'>Your Available Coupon:</h3>
@@ -92,4 +123,5 @@ const GiftCouponCard = () => {
 		</motion.div>
 	);
 };
+
 export default GiftCouponCard;
