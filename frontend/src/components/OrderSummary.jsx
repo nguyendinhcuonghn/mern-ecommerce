@@ -5,44 +5,37 @@ import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
 
-// Khởi tạo Stripe (Public Key - chỉ dùng ở client)
+// Khởi tạo Stripe (Public Key)
 const stripePromise = loadStripe(
 	"pk_test_51KZYccCoOZF2UhtOwdXQl3vcizup20zqKqT9hVUIsVzsdBrhqbUI2fE0ZdEVLdZfeHjeyFXtqaNsyCJCmZWnjNZa00PzMAjlcL"
 );
 
 const OrderSummary = () => {
-	// Lấy dữ liệu từ Cart Store
 	const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
-	// Tính toán tiết kiệm (nếu có coupon)
 	const savings = subtotal - total;
-
-	// Định dạng số tiền
 	const formattedSubtotal = subtotal.toFixed(2);
 	const formattedTotal = total.toFixed(2);
 	const formattedSavings = savings.toFixed(2);
 
-	/**
-	 * Xử lý thanh toán: Tạo Stripe Checkout Session và redirect người dùng
-	 */
 	const handlePayment = async () => {
-		const stripe = await stripePromise;
+		try {
+			const stripe = await stripePromise;
 
-		// Gọi API backend để tạo session thanh toán
-		const res = await axios.post("/payments/create-checkout-session", {
-			products: cart,
-			couponCode: coupon ? coupon.code : null,
-		});
+			const res = await axios.post("/payments/create-checkout-session", {
+				products: cart,
+				couponCode: coupon ? coupon.code : null,
+			});
 
-		const session = res.data;
+			const session = res.data;
+			console.log("Checkout session:", session);
 
-		// Redirect sang trang thanh toán của Stripe
-		const result = await stripe.redirectToCheckout({
-			sessionId: session.id,
-		});
-
-		if (result.error) {
-			console.error("Error:", result.error);
+			window.location.href = session.url
+			if (result.error) {
+				console.error("Stripe redirect error:", result.error);
+			}
+		} catch (error) {
+			console.error("Payment error:", error.response?.data || error.message);
 		}
 	};
 
@@ -56,14 +49,12 @@ const OrderSummary = () => {
 			<p className='text-xl font-semibold text-emerald-400'>Order summary</p>
 
 			<div className='space-y-4'>
-				{/* Chi tiết thanh toán */}
 				<div className='space-y-2'>
 					<dl className='flex items-center justify-between gap-4'>
 						<dt className='text-base font-normal text-gray-300'>Original price</dt>
 						<dd className='text-base font-medium text-white'>${formattedSubtotal}</dd>
 					</dl>
 
-					{/* Hiển thị tiết kiệm nếu có */}
 					{savings > 0 && (
 						<dl className='flex items-center justify-between gap-4'>
 							<dt className='text-base font-normal text-gray-300'>Savings</dt>
@@ -71,7 +62,6 @@ const OrderSummary = () => {
 						</dl>
 					)}
 
-					{/* Hiển thị thông tin coupon nếu đang áp dụng */}
 					{coupon && isCouponApplied && (
 						<dl className='flex items-center justify-between gap-4'>
 							<dt className='text-base font-normal text-gray-300'>Coupon ({coupon.code})</dt>
@@ -79,14 +69,12 @@ const OrderSummary = () => {
 						</dl>
 					)}
 
-					{/* Tổng tiền cuối cùng */}
 					<dl className='flex items-center justify-between gap-4 border-t border-gray-600 pt-2'>
 						<dt className='text-base font-bold text-white'>Total</dt>
 						<dd className='text-base font-bold text-emerald-400'>${formattedTotal}</dd>
 					</dl>
 				</div>
 
-				{/* Nút thanh toán */}
 				<motion.button
 					className='flex w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					whileHover={{ scale: 1.05 }}
@@ -96,7 +84,6 @@ const OrderSummary = () => {
 					Proceed to Checkout
 				</motion.button>
 
-				{/* Link tiếp tục mua sắm */}
 				<div className='flex items-center justify-center gap-2'>
 					<span className='text-sm font-normal text-gray-400'>or</span>
 					<Link
