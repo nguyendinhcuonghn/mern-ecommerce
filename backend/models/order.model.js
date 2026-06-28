@@ -1,23 +1,26 @@
 import mongoose from "mongoose";
 
+/**
+ * Định nghĩa Schema cho Order (Đơn hàng)
+ */
 const orderSchema = new mongoose.Schema(
 	{
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			ref: "User",           // Liên kết với model User
 			required: true,
 		},
 		products: [
 			{
 				product: {
 					type: mongoose.Schema.Types.ObjectId,
-					ref: "Product",
+					ref: "Product",    // Liên kết với model Product
 					required: true,
 				},
 				quantity: {
 					type: Number,
 					required: true,
-					min: 1,
+					min: 1,            // Ít nhất phải mua 1 sản phẩm
 				},
 				price: {
 					type: Number,
@@ -33,12 +36,17 @@ const orderSchema = new mongoose.Schema(
 		},
 		stripeSessionId: {
 			type: String,
-			unique: true,
+			unique: true,          // Mỗi session Stripe chỉ tạo 1 đơn hàng
 		},
 	},
-	{ timestamps: true }
+	{ 
+		timestamps: true           // Tự động thêm createdAt và updatedAt
+	}
 );
 
+/**
+ * Tạo model Order từ schema
+ */
 const Order = mongoose.model("Order", orderSchema);
 
 export default Order;

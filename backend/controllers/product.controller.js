@@ -2,9 +2,12 @@ import { redis } from "../lib/redis.js";
 import cloudinary from "../lib/cloudinary.js";
 import Product from "../models/product.model.js";
 
+/**
+ * Lấy tất cả sản phẩm
+ */
 export const getAllProducts = async (req, res) => {
 	try {
-		const products = await Product.find({}); // find all products
+		const products = await Product.find({}); // Lấy tất cả sản phẩm
 		res.json({ products });
 	} catch (error) {
 		console.log("Error in getAllProducts controller", error.message);
@@ -12,24 +15,28 @@ export const getAllProducts = async (req, res) => {
 	}
 };
 
+/**
+ * Lấy danh sách sản phẩm nổi bật (Featured Products)
+ * Sử dụng Redis cache để tăng tốc độ
+ */
 export const getFeaturedProducts = async (req, res) => {
 	try {
+		// Kiểm tra cache trong Redis trước
 		let featuredProducts = await redis.get("featured_products");
+
 		if (featuredProducts) {
 			return res.json(JSON.parse(featuredProducts));
 		}
 
-		// if not in redis, fetch from mongodb
-		// .lean() is gonna return a plain javascript object instead of a mongodb document
-		// which is good for performance
+		// Nếu chưa có trong Redis → lấy từ MongoDB
+		// .lean() trả về plain JavaScript object (nhanh hơn, không có method Mongoose)
 		featuredProducts = await Product.find({ isFeatured: true }).lean();
 
-		if (!featuredProducts) {
+		if (!featuredProducts || featuredProducts.length === 0) {
 			return res.status(404).json({ message: "No featured products found" });
 		}
 
-		// store in redis for future quick access
-
+		// Lưu vào Redis để lần sau lấy nhanh
 		await redis.set("featured_products", JSON.stringify(featuredProducts));
 
 		res.json(featuredProducts);
@@ -39,14 +46,22 @@ export const getFeaturedProducts = async (req, res) => {
 	}
 };
 
+/**
+ * Tạo sản phẩm mới
+ * - Upload ảnh lên Cloudinary (nếu có)
+ * - Lưu thông tin sản phẩm vào MongoDB
+ */
 export const createProduct = async (req, res) => {
 	try {
 		const { name, description, price, image, category } = req.body;
 
 		let cloudinaryResponse = null;
 
+		// Upload ảnh nếu có
 		if (image) {
-			cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
+			cloudinaryResponse = await cloudinary.uploader.upload(image, { 
+				folder: "products" 
+			});
 		}
 
 		const product = await Product.create({
@@ -64,6 +79,11 @@ export const createProduct = async (req, res) => {
 	}
 };
 
+/**
+ * Xóa sản phẩm
+ * - Xóa ảnh trên Cloudinary (nếu có)
+ * - Xóa record trong MongoDB
+ */
 export const deleteProduct = async (req, res) => {
 	try {
 		const product = await Product.findById(req.params.id);
@@ -72,13 +92,14 @@ export const deleteProduct = async (req, res) => {
 			return res.status(404).json({ message: "Product not found" });
 		}
 
+		// Xóa ảnh trên Cloudinary
 		if (product.image) {
 			const publicId = product.image.split("/").pop().split(".")[0];
 			try {
 				await cloudinary.uploader.destroy(`products/${publicId}`);
-				console.log("deleted image from cloduinary");
+				console.log("Deleted image from Cloudinary");
 			} catch (error) {
-				console.log("error deleting image from cloduinary", error);
+				console.log("Error deleting image from Cloudinary", error);
 			}
 		}
 
@@ -91,11 +112,15 @@ export const deleteProduct = async (req, res) => {
 	}
 };
 
+/**
+ * Lấy sản phẩm gợi ý (Recommended Products)
+ * Dùng $sample để lấy ngẫu nhiên 4 sản phẩm
+ */
 export const getRecommendedProducts = async (req, res) => {
 	try {
 		const products = await Product.aggregate([
 			{
-				$sample: { size: 4 },
+				$sample: { size: 4 }, // Lấy ngẫu nhiên 4 sản phẩm
 			},
 			{
 				$project: {
@@ -115,6 +140,9 @@ export const getRecommendedProducts = async (req, res) => {
 	}
 };
 
+/**
+ * Lấy sản phẩm theo danh mục
+ */
 export const getProductsByCategory = async (req, res) => {
 	const { category } = req.params;
 	try {
@@ -126,13 +154,21 @@ export const getProductsByCategory = async (req, res) => {
 	}
 };
 
+/**
+ * Bật/Tắt trạng thái nổi bật (Featured) cho một sản phẩm
+ * Sau khi thay đổi sẽ cập nhật lại cache Redis
+ */
 export const toggleFeaturedProduct = async (req, res) => {
 	try {
 		const product = await Product.findById(req.params.id);
+
 		if (product) {
-			product.isFeatured = !product.isFeatured;
+			product.isFeatured = !product.isFeatured; // Đảo trạng thái
 			const updatedProduct = await product.save();
+
+			// Cập nhật cache featured products
 			await updateFeaturedProductsCache();
+
 			res.json(updatedProduct);
 		} else {
 			res.status(404).json({ message: "Product not found" });
@@ -143,13 +179,14 @@ export const toggleFeaturedProduct = async (req, res) => {
 	}
 };
 
+/**
+ * Hàm hỗ trợ: Cập nhật cache featured products trong Redis
+ */
 async function updateFeaturedProductsCache() {
 	try {
-		// The lean() method  is used to return plain JavaScript objects instead of full Mongoose documents. This can significantly improve performance
-
 		const featuredProducts = await Product.find({ isFeatured: true }).lean();
 		await redis.set("featured_products", JSON.stringify(featuredProducts));
 	} catch (error) {
-		console.log("error in update cache function");
+		console.log("Error in updateFeaturedProductsCache function", error);
 	}
 }

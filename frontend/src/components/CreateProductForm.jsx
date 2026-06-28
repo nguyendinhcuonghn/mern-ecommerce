@@ -3,39 +3,60 @@ import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
 
+// Danh sách các danh mục sản phẩm cố định
 const categories = ["jeans", "t-shirts", "shoes", "glasses", "jackets", "suits", "bags"];
 
 const CreateProductForm = () => {
+	// State quản lý form
 	const [newProduct, setNewProduct] = useState({
 		name: "",
 		description: "",
 		price: "",
 		category: "",
-		image: "",
+		image: "",           // Lưu dưới dạng base64
 	});
 
+	// Lấy hàm createProduct và trạng thái loading từ Zustand store
 	const { createProduct, loading } = useProductStore();
 
+	/**
+	 * Xử lý submit form
+	 */
 	const handleSubmit = async (e) => {
-		e.preventDefault();
+		e.preventDefault();   // Ngăn reload trang
+
 		try {
+			// Gọi API tạo sản phẩm qua store
 			await createProduct(newProduct);
-			setNewProduct({ name: "", description: "", price: "", category: "", image: "" });
-		} catch {
+			
+			// Reset form sau khi tạo thành công
+			setNewProduct({ 
+				name: "", 
+				description: "", 
+				price: "", 
+				category: "", 
+				image: "" 
+			});
+		} catch (error) {
 			console.log("error creating a product");
 		}
 	};
 
+	/**
+	 * Xử lý khi user chọn ảnh
+	 * Chuyển file thành base64 để gửi lên server
+	 */
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 
+			// Khi đọc file xong
 			reader.onloadend = () => {
-				setNewProduct({ ...newProduct, image: reader.result });
+				setNewProduct({ ...newProduct, image: reader.result }); // base64 string
 			};
 
-			reader.readAsDataURL(file); // base64
+			reader.readAsDataURL(file); // Đọc file thành base64
 		}
 	};
 
@@ -46,9 +67,13 @@ const CreateProductForm = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8 }}
 		>
-			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>Create New Product</h2>
+			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>
+				Create New Product
+			</h2>
 
 			<form onSubmit={handleSubmit} className='space-y-4'>
+				
+				{/* === TÊN SẢN PHẨM === */}
 				<div>
 					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
 						Product Name
@@ -66,6 +91,7 @@ const CreateProductForm = () => {
 					/>
 				</div>
 
+				{/* === MÔ TẢ === */}
 				<div>
 					<label htmlFor='description' className='block text-sm font-medium text-gray-300'>
 						Description
@@ -83,6 +109,7 @@ const CreateProductForm = () => {
 					/>
 				</div>
 
+				{/* === GIÁ === */}
 				<div>
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
 						Price
@@ -93,7 +120,7 @@ const CreateProductForm = () => {
 						name='price'
 						value={newProduct.price}
 						onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-						step='0.01'
+						step='0.01'           // Cho phép nhập số thập phân
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
@@ -101,6 +128,7 @@ const CreateProductForm = () => {
 					/>
 				</div>
 
+				{/* === DANH MỤC === */}
 				<div>
 					<label htmlFor='category' className='block text-sm font-medium text-gray-300'>
 						Category
@@ -124,8 +152,18 @@ const CreateProductForm = () => {
 					</select>
 				</div>
 
+				{/* === UPLOAD ẢNH === */}
 				<div className='mt-1 flex items-center'>
-					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
+					{/* Input file ẩn */}
+					<input 
+						type='file' 
+						id='image' 
+						className='sr-only' 
+						accept='image/*' 
+						onChange={handleImageChange} 
+					/>
+					
+					{/* Label thay thế cho input file */}
 					<label
 						htmlFor='image'
 						className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
@@ -133,15 +171,20 @@ const CreateProductForm = () => {
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Upload Image
 					</label>
-					{newProduct.image && <span className='ml-3 text-sm text-gray-400'>Image uploaded </span>}
+
+					{/* Hiển thị thông báo đã upload */}
+					{newProduct.image && (
+						<span className='ml-3 text-sm text-gray-400'>Image uploaded</span>
+					)}
 				</div>
 
+				{/* === NÚT TẠO SẢN PHẨM === */}
 				<button
 					type='submit'
 					className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md 
 					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
 					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-					disabled={loading}
+					disabled={loading}   // Vô hiệu hóa nút khi đang loading
 				>
 					{loading ? (
 						<>
@@ -159,4 +202,5 @@ const CreateProductForm = () => {
 		</motion.div>
 	);
 };
+
 export default CreateProductForm;

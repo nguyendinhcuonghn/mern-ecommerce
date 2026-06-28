@@ -4,15 +4,28 @@ import { getAnalyticsData, getDailySalesData } from "../controllers/analytics.co
 
 const router = express.Router();
 
+/**
+ * Route lấy dữ liệu Analytics cho Admin Dashboard
+ * 
+ * Endpoint: GET /api/analytics/
+ * 
+ * Yêu cầu:
+ * - User phải đã đăng nhập (protectRoute)
+ * - User phải có quyền Admin (adminRoute)
+ */
 router.get("/", protectRoute, adminRoute, async (req, res) => {
 	try {
+		// Lấy dữ liệu tổng quan (tổng user, sản phẩm, đơn hàng, doanh thu)
 		const analyticsData = await getAnalyticsData();
 
+		// Thiết lập khoảng thời gian mặc định: 7 ngày gần nhất
 		const endDate = new Date();
-		const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+		const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); // trừ 7 ngày
 
+		// Lấy dữ liệu doanh số theo ngày để vẽ biểu đồ
 		const dailySalesData = await getDailySalesData(startDate, endDate);
 
+		// Trả về cả 2 loại dữ liệu
 		res.json({
 			analyticsData,
 			dailySalesData,
