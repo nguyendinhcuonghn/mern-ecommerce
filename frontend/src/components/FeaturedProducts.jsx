@@ -60,7 +60,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 			<div className='container mx-auto px-4'>
 				{/* Tiêu đề */}
 				<h2 className='text-center text-5xl sm:text-6xl font-bold text-emerald-400 mb-4'>
-					Featured
+					Sản Phẩm Nổi Bật
 				</h2>
 
 				<div className='relative'>
@@ -69,7 +69,6 @@ const FeaturedProducts = ({ featuredProducts }) => {
 						<div
 							className='flex transition-transform duration-300 ease-in-out'
 							style={{ 
-								// Di chuyển ngang theo tỷ lệ phần trăm
 								transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` 
 							}}
 						>
@@ -95,7 +94,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 												{product.name}
 											</h3>
 											<p className='text-emerald-300 font-medium mb-4'>
-												${product.price.toFixed(2)}
+												{product.price.toLocaleString()} ₫
 											</p>
 											
 											{/* Nút thêm vào giỏ hàng */}
@@ -105,7 +104,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 												flex items-center justify-center'
 											>
 												<ShoppingCart className='w-5 h-5 mr-2' />
-												Add to Cart
+												Thêm vào giỏ hàng
 											</button>
 										</div>
 									</div>
@@ -118,9 +117,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<button
 						onClick={prevSlide}
 						disabled={isStartDisabled}
-						className={`absolute top-1/2 -left-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
-							isStartDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
-						}`}
+						className={`absolute top-1/2 -left-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${isStartDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"}`}
 					>
 						<ChevronLeft className='w-6 h-6' />
 					</button>
@@ -129,9 +126,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<button
 						onClick={nextSlide}
 						disabled={isEndDisabled}
-						className={`absolute top-1/2 -right-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
-							isEndDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
-						}`}
+						className={`absolute top-1/2 -right-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${isEndDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"}`}
 					>
 						<ChevronRight className='w-6 h-6' />
 					</button>

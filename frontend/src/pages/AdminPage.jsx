@@ -8,9 +8,9 @@ import ProductsList from "../components/ProductsList";
 import { useProductStore } from "../stores/useProductStore";
 
 const tabs = [
-	{ id: "create", label: "Create Product", icon: PlusCircle },
-	{ id: "products", label: "Products", icon: ShoppingBasket },
-	{ id: "analytics", label: "Analytics", icon: BarChart },
+	{ id: "create", label: "Tạo sản phẩm", icon: PlusCircle },
+	{ id: "products", label: "Danh sách sản phẩm", icon: ShoppingBasket },
+	{ id: "analytics", label: "Thống kê", icon: BarChart },
 ];
 
 const AdminPage = () => {
@@ -33,14 +33,14 @@ const AdminPage = () => {
 					Admin Dashboard
 				</motion.h1>
 
-				<div className='flex justify-center mb-8'>
+				<div className='flex justify-center mb-8 flex-wrap gap-2'>
 					{tabs.map((tab) => (
 						<button
 							key={tab.id}
 							onClick={() => setActiveTab(tab.id)}
-							className={`flex items-center px-4 py-2 mx-2 rounded-md transition-colors duration-200 ${
+							className={`flex items-center px-5 py-3 mx-1 rounded-md transition-colors duration-200 font-medium ${
 								activeTab === tab.id
-									? "bg-emerald-600 text-white"
+									? "bg-emerald-600 text-white shadow-lg"
 									: "bg-gray-700 text-gray-300 hover:bg-gray-600"
 							}`}
 						>
@@ -49,6 +49,7 @@ const AdminPage = () => {
 						</button>
 					))}
 				</div>
+
 				{activeTab === "create" && <CreateProductForm />}
 				{activeTab === "products" && <ProductsList />}
 				{activeTab === "analytics" && <AnalyticsTab />}
@@ -56,4 +57,5 @@ const AdminPage = () => {
 		</div>
 	);
 };
+
 export default AdminPage;

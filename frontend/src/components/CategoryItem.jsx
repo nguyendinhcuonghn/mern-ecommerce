@@ -12,13 +12,13 @@ const CategoryItem = ({ category }) => {
 		<div className='relative overflow-hidden h-96 w-full rounded-lg group'>
 			{/* 
 				Link bao quanh toàn bộ card để click vào bất kỳ đâu cũng chuyển trang 
-				Đường dẫn: /category + category.href (ví dụ: /category/shirts)
+				Đường dẫn: /category + category.href (ví dụ: /category/web-development)
 			*/}
 			<Link to={"/category" + category.href}>
 				<div className='w-full h-full cursor-pointer'>
 					
 					{/* Overlay gradient tối ở phía dưới để chữ dễ đọc hơn */}
-					<div className='absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-50 z-10' />
+					<div className='absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-60 z-10' />
 
 					{/* Hình ảnh đại diện cho danh mục */}
 					<img
@@ -37,7 +37,7 @@ const CategoryItem = ({ category }) => {
 						
 						{/* Mô tả ngắn */}
 						<p className='text-gray-200 text-sm'>
-							Explore {category.name}
+							Khám phá {category.name.toLowerCase()}
 						</p>
 					</div>
 				</div>

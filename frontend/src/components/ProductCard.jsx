@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
 	const handleAddToCart = () => {
 		// Nếu chưa đăng nhập → yêu cầu login
 		if (!user) {
-			toast.error("Please login to add products to cart", { 
+			toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng", { 
 				id: "login"   // id để tránh toast hiển thị nhiều lần
 			});
 			return;
@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
 				<img 
 					className='object-cover w-full' 
 					src={product.image} 
-					alt='product image' 
+					alt={product.name} 
 				/>
 				{/* Overlay tối để tăng tính thẩm mỹ */}
 				<div className='absolute inset-0 bg-black bg-opacity-20' />
@@ -55,7 +55,7 @@ const ProductCard = ({ product }) => {
 				<div className='mt-2 mb-5 flex items-center justify-between'>
 					<p>
 						<span className='text-3xl font-bold text-emerald-400'>
-							${product.price}
+							{product.price.toLocaleString()} ₫
 						</span>
 					</p>
 				</div>
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
 					onClick={handleAddToCart}
 				>
 					<ShoppingCart size={22} className='mr-2' />
-					Add to cart
+					Thêm vào giỏ hàng
 				</button>
 			</div>
 		</div>

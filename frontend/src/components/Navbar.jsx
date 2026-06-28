@@ -23,7 +23,7 @@ const Navbar = () => {
 					
 					{/* Logo + Link về trang chủ */}
 					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
-						E-Commerce
+						AcademyTrack
 					</Link>
 
 					{/* Menu điều hướng */}
@@ -34,7 +34,7 @@ const Navbar = () => {
 							to={"/"}
 							className='text-gray-300 hover:text-emerald-400 transition duration-300 ease-in-out'
 						>
-							Home
+							Trang chủ
 						</Link>
 
 						{/* Link Cart - Chỉ hiển thị khi đã đăng nhập */}
@@ -44,7 +44,7 @@ const Navbar = () => {
 								className='relative group text-gray-300 hover:text-emerald-400 transition duration-300 ease-in-out'
 							>
 								<ShoppingCart className='inline-block mr-1 group-hover:text-emerald-400' size={20} />
-								<span className='hidden sm:inline'>Cart</span>
+								<span className='hidden sm:inline'>Giỏ hàng</span>
 								
 								{/* Badge số lượng sản phẩm trong giỏ */}
 								{cart.length > 0 && (
@@ -79,7 +79,7 @@ const Navbar = () => {
 								onClick={logout}
 							>
 								<LogOut size={18} />
-								<span className='hidden sm:inline ml-2'>Log Out</span>
+								<span className='hidden sm:inline ml-2'>Đăng xuất</span>
 							</button>
 						) : (
 							/* Chưa đăng nhập → Hiển thị nút Sign Up & Login */
@@ -90,7 +90,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out'
 								>
 									<UserPlus className='mr-2' size={18} />
-									Sign Up
+									Đăng ký
 								</Link>
 								<Link
 									to={"/login"}
@@ -98,7 +98,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out'
 								>
 									<LogIn className='mr-2' size={18} />
-									Login
+									Đăng nhập
 								</Link>
 							</>
 						)}

@@ -14,6 +14,7 @@ const CategoryPage = () => {
 	}, [fetchProductsByCategory, category]);
 
 	console.log("products:", products);
+
 	return (
 		<div className='min-h-screen'>
 			<div className='relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
@@ -34,7 +35,7 @@ const CategoryPage = () => {
 				>
 					{products?.length === 0 && (
 						<h2 className='text-3xl font-semibold text-gray-300 text-center col-span-full'>
-							No products found
+							Không tìm thấy sản phẩm nào
 						</h2>
 					)}
 
@@ -46,4 +47,5 @@ const CategoryPage = () => {
 		</div>
 	);
 };
+
 export default CategoryPage;

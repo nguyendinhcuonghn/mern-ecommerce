@@ -24,7 +24,9 @@ const LoginPage = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8 }}
 			>
-				<h2 className='mt-6 text-center text-3xl font-extrabold text-emerald-400'>Create your account</h2>
+				<h2 className='mt-6 text-center text-3xl font-extrabold text-emerald-400'>
+					Đăng nhập tài khoản
+				</h2>
 			</motion.div>
 
 			<motion.div
@@ -37,7 +39,7 @@ const LoginPage = () => {
 					<form onSubmit={handleSubmit} className='space-y-6'>
 						<div>
 							<label htmlFor='email' className='block text-sm font-medium text-gray-300'>
-								Email address
+								Địa chỉ Email
 							</label>
 							<div className='mt-1 relative rounded-md shadow-sm'>
 								<div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
@@ -53,14 +55,14 @@ const LoginPage = () => {
 									rounded-md shadow-sm
 									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 
 									 focus:border-emerald-500 sm:text-sm'
-									placeholder='you@example.com'
+									placeholder='ban@example.com'
 								/>
 							</div>
 						</div>
 
 						<div>
 							<label htmlFor='password' className='block text-sm font-medium text-gray-300'>
-								Password
+								Mật khẩu
 							</label>
 							<div className='mt-1 relative rounded-md shadow-sm'>
 								<div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
@@ -90,21 +92,21 @@ const LoginPage = () => {
 							{loading ? (
 								<>
 									<Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
-									Loading...
+									Đang đăng nhập...
 								</>
 							) : (
 								<>
 									<LogIn className='mr-2 h-5 w-5' aria-hidden='true' />
-									Login
+									Đăng nhập
 								</>
 							)}
 						</button>
 					</form>
 
 					<p className='mt-8 text-center text-sm text-gray-400'>
-						Not a member?{" "}
+						Chưa có tài khoản?{" "}
 						<Link to='/signup' className='font-medium text-emerald-400 hover:text-emerald-300'>
-							Sign up now <ArrowRight className='inline h-4 w-4' />
+							Đăng ký ngay <ArrowRight className='inline h-4 w-4' />
 						</Link>
 					</p>
 				</div>
@@ -112,4 +114,5 @@ const LoginPage = () => {
 		</div>
 	);
 };
+
 export default LoginPage;

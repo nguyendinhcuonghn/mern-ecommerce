@@ -26,7 +26,7 @@ const PeopleAlsoBought = () => {
 				setRecommendations(res.data);
 			} catch (error) {
 				// Hiển thị thông báo lỗi bằng react-hot-toast
-				toast.error(error.response?.data?.message || "An error occurred while fetching recommendations");
+				toast.error(error.response?.data?.message || "Có lỗi xảy ra khi tải gợi ý sản phẩm");
 			} finally {
 				setIsLoading(false);
 			}
@@ -42,7 +42,7 @@ const PeopleAlsoBought = () => {
 		<div className='mt-8'>
 			{/* Tiêu đề phần gợi ý */}
 			<h3 className='text-2xl font-semibold text-emerald-400'>
-				People also bought
+				Người ta cũng mua
 			</h3>
 
 			{/* Grid hiển thị các sản phẩm gợi ý */}

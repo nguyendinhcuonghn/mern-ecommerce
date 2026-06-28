@@ -9,9 +9,7 @@ import { useCartStore } from "../stores/useCartStore";
  *   (thường có: _id, name, description, price, image, quantity)
  */
 const CartItem = ({ item }) => {
-	// Lấy 2 hàm từ Cart Store (Zustand):
-	// - removeFromCart: xóa sản phẩm khỏi giỏ
-	// - updateQuantity: cập nhật số lượng sản phẩm
+	// Lấy 2 hàm từ Cart Store (Zustand)
 	const { removeFromCart, updateQuantity } = useCartStore();
 
 	return (
@@ -32,9 +30,6 @@ const CartItem = ({ item }) => {
 					/>
 				</div>
 
-				{/* Label ẩn cho accessibility (screen reader) */}
-				<label className='sr-only'>Choose quantity:</label>
-
 				{/* === PHẦN SỐ LƯỢNG + GIÁ === */}
 				<div className='flex items-center justify-between md:order-3 md:justify-end'>
 					{/* Nút tăng/giảm số lượng */}
@@ -50,7 +45,7 @@ const CartItem = ({ item }) => {
 						</button>
 
 						{/* Hiển thị số lượng hiện tại */}
-						<p>{item.quantity}</p>
+						<p className="w-6 text-center font-medium">{item.quantity}</p>
 
 						{/* Nút tăng số lượng */}
 						<button
@@ -63,9 +58,11 @@ const CartItem = ({ item }) => {
 						</button>
 					</div>
 
-					{/* Giá sản phẩm (bên phải) */}
+					{/* Giá sản phẩm */}
 					<div className='text-end md:order-4 md:w-32'>
-						<p className='text-base font-bold text-emerald-400'>${item.price}</p>
+						<p className='text-base font-bold text-emerald-400'>
+							{item.price.toLocaleString()} ₫
+						</p>
 					</div>
 				</div>
 
@@ -87,7 +84,7 @@ const CartItem = ({ item }) => {
 							onClick={() => removeFromCart(item._id)}
 						>
 							<Trash className="w-4 h-4 mr-1" />
-							Xóa
+							Xóa khỏi giỏ
 						</button>
 					</div>
 				</div>

@@ -3,8 +3,16 @@ import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
 
-// Danh sách các danh mục sản phẩm cố định
-const categories = ["jeans", "t-shirts", "shoes", "glasses", "jackets", "suits", "bags"];
+// Danh sách các danh mục sản phẩm (bạn có thể chỉnh lại cho phù hợp với e-learning)
+const categories = [
+	"web-development", 
+	"mobile-app", 
+	"data-science", 
+	"design", 
+	"marketing", 
+	"business", 
+	"other"
+];
 
 const CreateProductForm = () => {
 	// State quản lý form
@@ -23,10 +31,9 @@ const CreateProductForm = () => {
 	 * Xử lý submit form
 	 */
 	const handleSubmit = async (e) => {
-		e.preventDefault();   // Ngăn reload trang
+		e.preventDefault();
 
 		try {
-			// Gọi API tạo sản phẩm qua store
 			await createProduct(newProduct);
 			
 			// Reset form sau khi tạo thành công
@@ -38,7 +45,7 @@ const CreateProductForm = () => {
 				image: "" 
 			});
 		} catch (error) {
-			console.log("error creating a product");
+			console.error("Lỗi khi tạo sản phẩm:", error);
 		}
 	};
 
@@ -51,12 +58,11 @@ const CreateProductForm = () => {
 		if (file) {
 			const reader = new FileReader();
 
-			// Khi đọc file xong
 			reader.onloadend = () => {
-				setNewProduct({ ...newProduct, image: reader.result }); // base64 string
+				setNewProduct({ ...newProduct, image: reader.result });
 			};
 
-			reader.readAsDataURL(file); // Đọc file thành base64
+			reader.readAsDataURL(file);
 		}
 	};
 
@@ -68,7 +74,7 @@ const CreateProductForm = () => {
 			transition={{ duration: 0.8 }}
 		>
 			<h2 className='text-2xl font-semibold mb-6 text-emerald-300'>
-				Create New Product
+				Tạo Sản Phẩm Mới
 			</h2>
 
 			<form onSubmit={handleSubmit} className='space-y-4'>
@@ -76,7 +82,7 @@ const CreateProductForm = () => {
 				{/* === TÊN SẢN PHẨM === */}
 				<div>
 					<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
-						Product Name
+						Tên sản phẩm / Khóa học
 					</label>
 					<input
 						type='text'
@@ -94,14 +100,14 @@ const CreateProductForm = () => {
 				{/* === MÔ TẢ === */}
 				<div>
 					<label htmlFor='description' className='block text-sm font-medium text-gray-300'>
-						Description
+						Mô tả
 					</label>
 					<textarea
 						id='description'
 						name='description'
 						value={newProduct.description}
 						onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-						rows='3'
+						rows='4'
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm
 						 py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 
 						 focus:border-emerald-500'
@@ -112,7 +118,7 @@ const CreateProductForm = () => {
 				{/* === GIÁ === */}
 				<div>
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
-						Price
+						Giá (VND)
 					</label>
 					<input
 						type='number'
@@ -120,7 +126,7 @@ const CreateProductForm = () => {
 						name='price'
 						value={newProduct.price}
 						onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-						step='0.01'           // Cho phép nhập số thập phân
+						step='1000'
 						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm 
 						py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500
 						 focus:border-emerald-500'
@@ -131,7 +137,7 @@ const CreateProductForm = () => {
 				{/* === DANH MỤC === */}
 				<div>
 					<label htmlFor='category' className='block text-sm font-medium text-gray-300'>
-						Category
+						Danh mục
 					</label>
 					<select
 						id='category'
@@ -143,10 +149,15 @@ const CreateProductForm = () => {
 						 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500'
 						required
 					>
-						<option value=''>Select a category</option>
+						<option value=''>Chọn danh mục</option>
 						{categories.map((category) => (
 							<option key={category} value={category}>
-								{category}
+								{category === "web-development" ? "Web Development" :
+								 category === "mobile-app" ? "Ứng dụng Mobile" :
+								 category === "data-science" ? "Khoa học Dữ liệu" :
+								 category === "design" ? "Thiết kế" :
+								 category === "marketing" ? "Marketing" :
+								 category === "business" ? "Kinh doanh" : "Khác"}
 							</option>
 						))}
 					</select>
@@ -154,7 +165,6 @@ const CreateProductForm = () => {
 
 				{/* === UPLOAD ẢNH === */}
 				<div className='mt-1 flex items-center'>
-					{/* Input file ẩn */}
 					<input 
 						type='file' 
 						id='image' 
@@ -163,38 +173,36 @@ const CreateProductForm = () => {
 						onChange={handleImageChange} 
 					/>
 					
-					{/* Label thay thế cho input file */}
 					<label
 						htmlFor='image'
 						className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500'
 					>
 						<Upload className='h-5 w-5 inline-block mr-2' />
-						Upload Image
+						Tải ảnh lên
 					</label>
 
-					{/* Hiển thị thông báo đã upload */}
 					{newProduct.image && (
-						<span className='ml-3 text-sm text-gray-400'>Image uploaded</span>
+						<span className='ml-3 text-sm text-emerald-400'>✓ Đã tải ảnh</span>
 					)}
 				</div>
 
-				{/* === NÚT TẠO SẢN PHẨM === */}
+				{/* === NÚT TẠO === */}
 				<button
 					type='submit'
-					className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md 
+					className='w-full flex justify-center py-3 px-4 border border-transparent rounded-md 
 					shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 
 					focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50'
-					disabled={loading}   // Vô hiệu hóa nút khi đang loading
+					disabled={loading}
 				>
 					{loading ? (
 						<>
-							<Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
-							Loading...
+							<Loader className='mr-2 h-5 w-5 animate-spin' />
+							Đang tạo...
 						</>
 					) : (
 						<>
 							<PlusCircle className='mr-2 h-5 w-5' />
-							Create Product
+							Tạo sản phẩm mới
 						</>
 					)}
 				</button>

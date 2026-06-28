@@ -27,7 +27,7 @@ const AnalyticsTab = () => {
 				setAnalyticsData(response.data.analyticsData);
 				setDailySalesData(response.data.dailySalesData);
 			} catch (error) {
-				console.error("Error fetching analytics data:", error);
+				console.error("Lỗi khi lấy dữ liệu thống kê:", error);
 			} finally {
 				setIsLoading(false);
 			}
@@ -38,7 +38,7 @@ const AnalyticsTab = () => {
 
 	// Hiển thị loading khi đang lấy dữ liệu
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <div className="text-center py-10 text-gray-400">Đang tải dữ liệu...</div>;
 	}
 
 	return (
@@ -46,26 +46,26 @@ const AnalyticsTab = () => {
 			{/* Grid hiển thị 4 thẻ thống kê tổng quan */}
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
 				<AnalyticsCard
-					title='Total Users'
+					title='Tổng Người Dùng'
 					value={analyticsData.users.toLocaleString()}
 					icon={Users}
 					color='from-emerald-500 to-teal-700'
 				/>
 				<AnalyticsCard
-					title='Total Products'
+					title='Tổng Khóa Học'
 					value={analyticsData.products.toLocaleString()}
 					icon={Package}
 					color='from-emerald-500 to-green-700'
 				/>
 				<AnalyticsCard
-					title='Total Sales'
+					title='Tổng Đơn Hàng'
 					value={analyticsData.totalSales.toLocaleString()}
 					icon={ShoppingCart}
 					color='from-emerald-500 to-cyan-700'
 				/>
 				<AnalyticsCard
-					title='Total Revenue'
-					value={`$${analyticsData.totalRevenue.toLocaleString()}`}
+					title='Tổng Doanh Thu'
+					value={`${analyticsData.totalRevenue.toLocaleString()} ₫`}
 					icon={DollarSign}
 					color='from-emerald-500 to-lime-700'
 				/>
@@ -78,10 +78,12 @@ const AnalyticsTab = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5, delay: 0.25 }}
 			>
+				<h3 className="text-xl font-semibold text-white mb-4">Doanh Thu Theo Ngày</h3>
+				
 				<ResponsiveContainer width='100%' height={400}>
 					<LineChart data={dailySalesData}>
-						<CartesianGrid strokeDasharray='3 3' />
-						<XAxis dataKey='name' stroke='#D1D5DB' />   {/* Có thể cần sửa dataKey nếu backend trả về 'date' */}
+						<CartesianGrid strokeDasharray='3 3' stroke="#374151" />
+						<XAxis dataKey='name' stroke='#D1D5DB' />
 						<YAxis yAxisId='left' stroke='#D1D5DB' />
 						<YAxis yAxisId='right' orientation='right' stroke='#D1D5DB' />
 						<Tooltip />
@@ -92,7 +94,7 @@ const AnalyticsTab = () => {
 							dataKey='sales'
 							stroke='#10B981'
 							activeDot={{ r: 8 }}
-							name='Sales'
+							name='Đơn Hàng'
 						/>
 						<Line
 							yAxisId='right'
@@ -100,7 +102,7 @@ const AnalyticsTab = () => {
 							dataKey='revenue'
 							stroke='#3B82F6'
 							activeDot={{ r: 8 }}
-							name='Revenue'
+							name='Doanh Thu'
 						/>
 					</LineChart>
 				</ResponsiveContainer>

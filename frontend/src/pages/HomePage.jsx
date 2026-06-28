@@ -4,13 +4,13 @@ import { useProductStore } from "../stores/useProductStore";
 import FeaturedProducts from "../components/FeaturedProducts";
 
 const categories = [
-	{ href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
-	{ href: "/t-shirts", name: "T-shirts", imageUrl: "/tshirts.jpg" },
-	{ href: "/shoes", name: "Shoes", imageUrl: "/shoes.jpg" },
-	{ href: "/glasses", name: "Glasses", imageUrl: "/glasses.png" },
-	{ href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
-	{ href: "/suits", name: "Suits", imageUrl: "/suits.jpg" },
-	{ href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
+	{ href: "/web-development", name: "Web Development", imageUrl: "/web-dev.jpg" },
+	{ href: "/mobile-app", name: "Ứng dụng Mobile", imageUrl: "/mobile.jpg" },
+	{ href: "/data-science", name: "Data Science", imageUrl: "/data-science.jpg" },
+	{ href: "/design", name: "Thiết kế", imageUrl: "/design.jpg" },
+	{ href: "/marketing", name: "Marketing", imageUrl: "/marketing.jpg" },
+	{ href: "/business", name: "Kinh doanh", imageUrl: "/business.jpg" },
+	{ href: "/other", name: "Khác", imageUrl: "/other.jpg" },
 ];
 
 const HomePage = () => {
@@ -24,10 +24,10 @@ const HomePage = () => {
 		<div className='relative min-h-screen text-white overflow-hidden'>
 			<div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
 				<h1 className='text-center text-5xl sm:text-6xl font-bold text-emerald-400 mb-4'>
-					Explore Our Categories
+					Khám Phá Các Danh Mục
 				</h1>
 				<p className='text-center text-xl text-gray-300 mb-12'>
-					Discover the latest trends in eco-friendly fashion
+					Học lập trình với những khóa học chất lượng cao và thực tế nhất
 				</p>
 
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
@@ -41,4 +41,5 @@ const HomePage = () => {
 		</div>
 	);
 };
+
 export default HomePage;
